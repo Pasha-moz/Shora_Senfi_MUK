@@ -1,0 +1,11 @@
+name = "telegram-shora-bot"
+main = "worker.js"
+compatibility_date = "2024-12-18"
+
+[vars]
+BOT_TOKEN = "8420190071:AAEoe5GhcjK0_nwdknQAFqB_0e2jlMYwy8w"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "shora-db"
+database_id = "YOUR_DATABASE_ID"  # بعد از ایجاد دیتابیس جایگزین کن
