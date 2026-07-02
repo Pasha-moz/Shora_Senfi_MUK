@@ -8,4 +8,4 @@ BOT_TOKEN = "8420190071:AAEoe5GhcjK0_nwdknQAFqB_0e2jlMYwy8w"
 [[d1_databases]]
 binding = "DB"
 database_name = "shora-db"
-database_id = "YOUR_DATABASE_ID"  # بعد از ایجاد دیتابیس جایگزین کن
+database_id = "b403b04c-c0cd-4893-8b72-c2efaefd19b9"  # بعد از ایجاد دیتابیس جایگزین کن
