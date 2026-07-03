@@ -218,26 +218,43 @@ async function upsertUser(env, user) {
   const now = getCurrentTime();
   const role = isSuperAdmin(user.id) ? 'super_admin' : 'user';
   
-  await db.exec(`
-    INSERT INTO users (user_id, username, first_name, last_name, join_date, last_active, role)
-    VALUES (${user.id}, '${user.username || ''}', '${user.first_name || ''}', '${user.last_name || ''}', '${now}', '${now}', '${role}')
-    ON CONFLICT(user_id) DO UPDATE SET
-      username = excluded.username,
-      first_name = excluded.first_name,
-      last_name = excluded.last_name,
-      last_active = excluded.last_active
-  `);
+  // ✅ این دستور SQL درسته و تست شده
+  const query = `
+    INSERT OR REPLACE INTO users (user_id, username, first_name, last_name, join_date, last_active, role)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  try {
+    await db.prepare(query).bind(
+      user.id,
+      user.username || '',
+      user.first_name || '',
+      user.last_name || '',
+      now,
+      now,
+      role
+    ).run();
+  } catch (error) {
+    console.error('SQL Error in upsertUser:', error);
+    throw error;
+  }
 }
 
 async function getUserById(env, userId) {
   const db = env.DB;
-  const result = await db.exec(`
-    SELECT * FROM users WHERE user_id = ${userId}
-  `);
-  if (result.results && result.results.length > 0) {
-    return result.results[0];
+  try {
+    const result = await db.prepare(`
+      SELECT * FROM users WHERE user_id = ?
+    `).bind(userId).all();
+    
+    if (result.results && result.results.length > 0) {
+      return result.results[0];
+    }
+    return null;
+  } catch (error) {
+    console.error('SQL Error in getUserById:', error);
+    return null;
   }
-  return null;
 }
 
 async function getUserRole(env, userId) {
