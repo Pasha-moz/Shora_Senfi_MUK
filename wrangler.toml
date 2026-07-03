@@ -1,4 +1,4 @@
-name = "telegram-shora-bot"
+name = "shorasenfimuk"
 main = "worker.js"
 compatibility_date = "2024-12-18"
 
